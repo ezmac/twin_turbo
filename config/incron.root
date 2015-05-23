@@ -1,0 +1,2 @@
+/data/config/nginx/ IN_MODIFY /usr/sbin/service nginx reload
+/data/config/nginx/sites-enabled/ IN_MODIFY /usr/sbin/service nginx reload
