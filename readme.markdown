@@ -1,6 +1,6 @@
-# Nginx front container.
+# twinturbo
 
-Docker based nginx install.  Builds Nginx 1.6.2 from source. Configurations loaded from /data/config/.  Changes to config files gracefully reloads nginx server.
+An app acceletator based on nginx and hiphop.  Written for fun, not to be useful.  It almost works, though.  Uses hiphop and pQuery to slice out the requested portion of a page.  Pjax requests are 20x slower than normal requests because while hiphop has JIT, there's no intelligent file caching. That said, it's a start and the moving parts are set up.  Have fun with it.
 
 ## To run
 ```bash
