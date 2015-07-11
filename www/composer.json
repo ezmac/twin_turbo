@@ -1,0 +1,13 @@
+{
+    "name": "wm284/www",
+    "require-dev": {
+        "tburry/pquery": "^1.1"
+    },
+    "authors": [
+        {
+            "name": "Tad Merchant",
+            "email": "system.root@gmail.com"
+        }
+    ],
+    "require": {}
+}

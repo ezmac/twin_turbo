@@ -1,6 +1,8 @@
 FROM debian
 MAINTAINER Tad Merchant <system.root@gmail.com>
 
+## INSTALL SOFTWARE 
+
 # do dist upgrade to be on latest debian.
 ADD config/sources.list /etc/apt/sources.list
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
@@ -17,11 +19,19 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y nginx
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y unzip
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y fcgiwrap
 
-#install nginx 1.9
+RUN wget -O - http://dl.hhvm.com/conf/hhvm.gpg.key |  apt-key add -
+RUN echo deb http://dl.hhvm.com/debian jessie main |  tee /etc/apt/sources.list.d/hhvm.list
+RUN apt-get update
+RUN apt-get install -y hhvm 
+ #install nginx 1.9
 
 #RUN mkdir /tmp/nginx && cd /tmp/nginx/ && wget --no-check-certificate https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.2-beta.zip && unzip release-1.9.32.2-beta.zip && cd ngx_pagespeed-release-1.9.32.2-beta &&wget --no-check-certificate https://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz && tar -xvf 1.9.32.2.tar.gz && cd /tmp/nginx/ && wget -d http://nginx.org/download/nginx-1.6.2.tar.gz && tar -xf nginx-1.6.2.tar.gz && cd nginx-1.6.2 && ./configure --add-module=/tmp/nginx/ngx_pagespeed-release-1.9.32.2-beta --with-http_gzip_static_module --with-http_spdy_module --with-http_ssl_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-log-path=/var/log/nginx/access.log --prefix=/etc/nginx/ --sbin-path=/usr/sbin/nginx --user=www-data --group=www-data '--with-cc-opt=-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic' && make && make install
 RUN mkdir /tmp/nginx/ && cd /tmp/nginx/ && wget -d http://nginx.org/download/nginx-1.9.2.tar.gz && tar -xf nginx-1.9.2.tar.gz && cd nginx-1.9.2 && ./configure --with-http_gzip_static_module --with-http_spdy_module --with-http_ssl_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-log-path=/var/log/nginx/access.log --prefix=/etc/nginx/ --sbin-path=/usr/sbin/nginx --user=www-data --group=www-data '--with-cc-opt=-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic' && make && make install
 
+
+
+
+## DO CONFIGURATION
 RUN mkdir -p /var/log/nginx
 
 
@@ -33,15 +43,20 @@ VOLUME ['/data/logs','/data/config']
 RUN cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
 RUN mkdir /pagefilter/
 
+RUN echo "cgi.fix_pathinfo = 0;" >> /etc/hhvm/server.ini
+RUN echo "hhvm.server.user = www-data;" >> /etc/hhvm/server.ini
 
 
 ADD pup /pagefilter/
 ADD pagefilter.sh /pagefilter/
 ADD run.sh /
-
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y memcached
 RUN chmod +x /etc/init.d/fcgiwrap
 RUN chmod +x /pagefilter/pagefilter.sh
 
 
 CMD ["/bin/bash"]
 ENTRYPOINT ["/run.sh"]
+
+
+
