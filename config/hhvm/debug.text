@@ -1,0 +1,23 @@
+Log {
+    Level = Verbose
+    NoSilencer = true
+    AlwaysLogUnhandledExceptions = true
+    RuntimeErrorReportingLevel = 6143
+    Header = false
+    InjectedStackTrace = true
+    NativeStackTrace = true
+    MaxMessagesPerRequest = -1
+}
+
+ErrorHandling {
+    CallUserHandlerOnFatals = true
+    NoInfiniteLoopDetection = false
+    NoInfiniteRecursionDetection = false
+    MaxStackDepth = 1000
+    ThrowBadTypeExceptions = true
+    ThrowNotices = true
+    NoticeFrequency = 1    # 1 out of these many notices to log
+    WarningFrequency = 1   # 1 out of these many warnings to log
+    AssertActive = false
+    AssertWarning = false
+  }
